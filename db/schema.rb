@@ -10,38 +10,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171117103500) do
+ActiveRecord::Schema.define(version: 20171117125834) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_trgm"
 
   create_table "adjustments", id: :serial, force: :cascade do |t|
-    t.integer "agenda_id"
     t.integer "user_id"
     t.boolean "presence", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.integer "row_order"
-    t.index ["agenda_id"], name: "index_adjustments_on_agenda_id"
+    t.bigint "agenda_item_id"
+    t.index ["agenda_item_id"], name: "index_adjustments_on_agenda_item_id"
     t.index ["deleted_at"], name: "index_adjustments_on_deleted_at"
     t.index ["user_id"], name: "index_adjustments_on_user_id"
   end
 
+  create_table "agenda_items", force: :cascade do |t|
+    t.string "title", default: "", null: false
+    t.string "data", default: "", null: false
+    t.string "result"
+    t.bigint "agenda_id"
+    t.integer "type", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "deleted_at"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agenda_id"], name: "index_agenda_items_on_agenda_id"
+    t.index ["deleted_at"], name: "index_agenda_items_on_deleted_at"
+  end
+
   create_table "agendas", id: :serial, force: :cascade do |t|
-    t.integer "parent_id"
-    t.integer "index", default: 1
-    t.string "sort_index"
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.text "description"
-    t.string "short"
-    t.integer "status", default: 0, null: false
+    t.integer "position"
     t.index ["deleted_at"], name: "index_agendas_on_deleted_at"
-    t.index ["parent_id"], name: "index_agendas_on_parent_id"
   end
 
   create_table "audits", id: :serial, force: :cascade do |t|
@@ -67,10 +77,8 @@ ActiveRecord::Schema.define(version: 20171117103500) do
     t.string "category", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer "user_id"
-    t.integer "agenda_id"
-    t.index ["agenda_id"], name: "index_documents_on_agenda_id"
-    t.index ["user_id"], name: "index_documents_on_user_id"
+    t.bigint "agenda_item_id"
+    t.index ["agenda_item_id"], name: "index_documents_on_agenda_item_id"
   end
 
   create_table "news", id: :serial, force: :cascade do |t|
@@ -143,20 +151,21 @@ ActiveRecord::Schema.define(version: 20171117103500) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.integer "choices", default: 1
-    t.integer "agenda_id"
     t.integer "present_users", default: 0, null: false
     t.integer "status", default: 0, null: false
-    t.index ["agenda_id"], name: "index_votes_on_agenda_id"
+    t.bigint "agenda_item_id"
+    t.index ["agenda_item_id"], name: "index_votes_on_agenda_item_id"
     t.index ["deleted_at"], name: "index_votes_on_deleted_at"
   end
 
-  add_foreign_key "adjustments", "agendas"
+  add_foreign_key "adjustments", "agenda_items"
   add_foreign_key "adjustments", "users"
+  add_foreign_key "agenda_items", "agendas"
   add_foreign_key "audits", "users"
   add_foreign_key "audits", "votes"
-  add_foreign_key "documents", "agendas"
+  add_foreign_key "documents", "agenda_items"
   add_foreign_key "vote_options", "votes"
   add_foreign_key "vote_posts", "users"
   add_foreign_key "vote_posts", "votes"
-  add_foreign_key "votes", "agendas"
+  add_foreign_key "votes", "agenda_items"
 end

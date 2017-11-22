@@ -11,8 +11,8 @@ RSpec.describe VotePostsController, type: :controller do
 
   describe 'GET #new' do
     it 'sets new vote_post if post is open' do
-      agenda = create(:agenda, status: :current)
-      vote = create(:vote, status: :open, agenda: agenda)
+      agenda_item = create(:agenda_item, status: :current)
+      vote = create(:vote, status: :open, agenda_item: agenda_item)
 
       get(:new, params: { vote_id: vote })
 
@@ -45,9 +45,9 @@ RSpec.describe VotePostsController, type: :controller do
 
   describe 'POST #create' do
     it 'valid parameters' do
-      agenda = create(:agenda, status: :current)
+      agenda_item = create(:agenda_item, status: :current)
       user.update!(presence: true, votecode: 'abcd123')
-      vote = create(:vote, :with_options, status: :open, agenda: agenda)
+      vote = create(:vote, :with_options, status: :open, agenda_item: agenda_item)
       attributes = { votecode: 'abcd123',
                      vote_option_ids: [vote.vote_options.first.id] }
 
@@ -60,8 +60,8 @@ RSpec.describe VotePostsController, type: :controller do
 
     it 'allows blank votes' do
       user.update!(presence: true, votecode: 'abcd123')
-      agenda = create(:agenda, status: :current)
-      vote = create(:vote, :with_options, status: :open, agenda: agenda)
+      agenda_item = create(:agenda_item, status: :current)
+      vote = create(:vote, :with_options, status: :open, agenda_item: agenda_item)
       attributes = { votecode: 'abcd123' }
 
       lambda do
@@ -73,8 +73,8 @@ RSpec.describe VotePostsController, type: :controller do
 
     it 'invalid parameters' do
       user.update!(presence: true, votecode: 'abcd123')
-      agenda = create(:agenda, status: :current)
-      vote = create(:vote, :with_options, status: :open, agenda: agenda)
+      agenda_item = create(:agenda_item, status: :current)
+      vote = create(:vote, :with_options, status: :open, agenda_item: agenda_item)
       attributes = { votecode: 'falseyfalsey',
                      vote_option_ids: [vote.vote_options.first.id] }
 

@@ -46,8 +46,6 @@ RSpec.describe Admin::DocumentsController, type: :controller do
       end.should change(Document, :count).by(1)
 
       response.should redirect_to(edit_admin_document_path(Document.last))
-      # current_user is set and the document user should be set to this
-      Document.last.user_id.should eq(user.id)
     end
 
     it 'invalid parameters' do
@@ -62,15 +60,13 @@ RSpec.describe Admin::DocumentsController, type: :controller do
 
   describe 'PATCH #update' do
     it 'valid parameters' do
-      document = create(:document, title: 'A Bad Title', user_id: 99)
+      document = create(:document, title: 'A Bad Title')
 
       patch(:update, params: { id: document.to_param,
                                document: { title: 'A Good Title' } })
       document.reload
 
       response.should redirect_to(edit_admin_document_path(document))
-      # current_user is set and the document user should be updated
-      document.user_id.should eq(user.id)
     end
 
     it 'invalid parameters' do

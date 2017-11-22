@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AgendasHelper
   def agenda_state_link(agenda)
     if agenda.current?
@@ -17,32 +19,28 @@ module AgendasHelper
             method: :patch, remote: true)
   end
 
-  def agenda_status_str(state)
-    t("model.agenda.statuses.#{state}")
+  def agenda_status(state)
+    t("model.agenda_item.statuses.#{state}")
   end
 
   def agenda_status_collection
-    Agenda.statuses.keys.map do |s|
-      [agenda_status_str(s), s]
+    AgendaItem.statuses.keys.map do |s|
+      [agenda_status(s), s]
+    end
+  end
+
+  def agenda_item_type(type)
+    t("model.agenda_item.types.#{type}")
+  end
+
+  def agenda_item_types
+    AgendaItem.types.keys.map do |s|
+      [agenda_item_type(s), s]
     end
   end
 
   def agenda_link(agenda)
     content = [agenda.to_s]
-
-    if agenda.short.present?
-      content << ' - '
-      content << agenda.short
-    end
-
-    if agenda.current?
-      content << ''
-      content << fa_icon('angle-double-left')
-      if agenda.parent.present?
-        content << ' '
-        content << t('current')
-      end
-    end
 
     link_to safe_join(content), agenda_path(agenda)
   end

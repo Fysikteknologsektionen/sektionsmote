@@ -1,0 +1,19 @@
+<%= simple_form_for([:admin, agenda, item], remote: true) do |f| %>
+  <tr>
+    <td>
+      <%= f.input(:type, label: false,
+                         collection: agenda_item_types,
+                         input_html: { class: 'select2-single', style: 'width: 100px' },
+                         include_blank: false) %>
+    </td>
+    <td><%= f.input(:position, label: false, input_html: { style: 'width: 100px;'}) %></td>
+    <td><%= f.input(:title, label: false, input_html: { style: 'width: 100%;'}) %></td>
+    <td>
+      <%= f.input(:status, label: false,
+                           collection: agenda_status_collection,
+                           input_html: { class: 'select2-single', style: 'width: 100px' },
+                           include_blank: false) %>
+    </td>
+    <td><%= f.button(:submit, item.persisted? ? 'Uppdatera' : 'Spara', class: 'small') %></td>
+  </tr>
+<% end %>

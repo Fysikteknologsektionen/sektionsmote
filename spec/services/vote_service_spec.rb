@@ -5,10 +5,10 @@ RSpec.describe VoteService do
   describe 'user_vote' do
     it 'votes' do
       user = create(:user, presence: true, votecode: 'abcd123')
-      agenda = create(:agenda, status: :current)
+      agenda_item = create(:agenda_item, status: :current)
       vote = create(:vote, :with_options, status: :open,
                                           choices: 1,
-                                          agenda: agenda)
+                                          agenda_item: agenda_item)
       vote_option = vote.vote_options.first
 
       vote_post = VotePost.new(user: user, vote: vote, votecode: 'abcd123')
@@ -29,10 +29,10 @@ RSpec.describe VoteService do
 
     it 'votes and trims votecode' do
       user = create(:user, presence: true, votecode: 'abcd123')
-      agenda = create(:agenda, status: :current)
+      agenda_item = create(:agenda_item, status: :current)
       vote = create(:vote, :with_options, status: :open,
                                           choices: 1,
-                                          agenda: agenda)
+                                          agenda_item: agenda_item)
       vote_option = vote.vote_options.first
 
       vote_post = VotePost.new(user: user, vote: vote, votecode: '   abcd123')
@@ -55,10 +55,10 @@ RSpec.describe VoteService do
 
     it 'votes multiple' do
       user = create(:user, presence: true, votecode: 'abcd123')
-      agenda = create(:agenda, status: :current)
+      agenda_item = create(:agenda_item, status: :current)
       vote = create(:vote, :with_options, status: :open,
                                           choices: 2,
-                                          agenda: agenda)
+                                          agenda_item: agenda_item)
       first_option = vote.vote_options.first
       second_option = vote.vote_options.second
 
@@ -80,10 +80,10 @@ RSpec.describe VoteService do
 
     it 'invalid vote' do
       user = create(:user, presence: true, votecode: 'abcd123')
-      agenda = create(:agenda, status: :current)
+      agenda_item = create(:agenda_item, status: :current)
       vote = create(:vote, :with_options, status: :open,
                                           choices: 1,
-                                          agenda: agenda)
+                                          agenda_item: agenda_item)
       # vote has 3 vote options when using :with_options
       first_option = vote.vote_options.first
       last_option = vote.vote_options.last
@@ -104,8 +104,8 @@ RSpec.describe VoteService do
 
     it 'blank vote' do
       user = create(:user, presence: true, votecode: 'abcd123')
-      agenda = create(:agenda, status: :current)
-      vote = create(:vote, status: :open, choices: 1, agenda: agenda)
+      agenda_item = create(:agenda_item, status: :current)
+      vote = create(:vote, status: :open, choices: 1, agenda_item: agenda_item)
 
       opt1 = create(:vote_option, vote: vote, count: 0)
       opt2 = create(:vote_option, vote: vote, count: 0)
@@ -131,7 +131,7 @@ RSpec.describe VoteService do
   describe 'presence' do
     it 'set_present' do
       user = create(:user, presence: false)
-      create(:agenda, status: :current)
+      create(:agenda_item, status: :current)
 
       result = VoteService.set_present(user)
       user.reload
@@ -140,7 +140,7 @@ RSpec.describe VoteService do
       user.presence.should be_truthy
     end
 
-    it 'set_present fail if no agendas' do
+    it 'set_present fail if no agenda_items' do
       user = create(:user, presence: false)
 
       result = VoteService.set_present(user)
@@ -150,9 +150,9 @@ RSpec.describe VoteService do
       user.presence.should be_falsey
     end
 
-    it 'set_present fail if no current agenda' do
+    it 'set_present fail if no current agenda_item' do
       user = create(:user, presence: false)
-      create(:agenda)
+      create(:agenda_item)
 
       result = VoteService.set_present(user)
       user.reload
@@ -163,8 +163,8 @@ RSpec.describe VoteService do
 
     it 'set_present works if a vote is open' do
       user = create(:user, presence: false)
-      agenda = create(:agenda, status: :current)
-      create(:vote, status: :open, agenda: agenda)
+      agenda_item = create(:agenda_item, status: :current)
+      create(:vote, status: :open, agenda_item: agenda_item)
 
       result = VoteService.set_present(user)
       user.reload
@@ -175,7 +175,7 @@ RSpec.describe VoteService do
 
     it 'set_not_present' do
       user = create(:user, presence: true)
-      create(:agenda, status: :current)
+      create(:agenda_item, status: :current)
 
       result = VoteService.set_not_present(user)
       user.reload
@@ -186,8 +186,8 @@ RSpec.describe VoteService do
 
     it 'set_not_present fail if open vote' do
       user = create(:user, presence: true)
-      agenda = create(:agenda, status: :current)
-      create(:vote, status: :open, agenda: agenda)
+      agenda_item = create(:agenda_item, status: :current)
+      create(:vote, status: :open, agenda_item: agenda_item)
 
       result = VoteService.set_not_present(user)
       user.reload
@@ -198,7 +198,7 @@ RSpec.describe VoteService do
 
     it 'returns false if no user' do
       user = nil
-      create(:agenda, status: :current)
+      create(:agenda_item, status: :current)
 
       present = VoteService.set_present(user)
       not_present = VoteService.set_not_present(user)
@@ -221,7 +221,7 @@ RSpec.describe VoteService do
 
     it 'handles nil user' do
       user = nil
-      create(:agenda, status: :current)
+      create(:agenda_item, status: :current)
       result = VoteService.set_votecode(user)
 
       result.should be_falsey
@@ -250,7 +250,7 @@ RSpec.describe VoteService do
       create(:user, presence: true)
       create(:user, presence: true)
       create(:user, presence: false)
-      create(:agenda, status: :current)
+      create(:agenda_item, status: :current)
 
       result = VoteService.set_all_not_present
       result.should be_truthy

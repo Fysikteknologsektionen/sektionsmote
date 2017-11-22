@@ -17,23 +17,13 @@
     <br>
   <% end %>
 
-  <% if @agenda.parent.present? %>
-    <div class="headline">
-      <h4><%= t('agenda.parent') %></h4>
-    </div>
-    <h5 class="vote agenda">
-      <%= link_to(@agenda.parent, agenda_path(@agenda.parent)) %>
-    </h5>
-    <br>
-  <% end %>
-
-  <% if @agenda.children.count > 0 %>
+  <% if @agenda.items.any? %>
     <div class="headline">
       <h4><%= t('agenda.children') %></h4>
     </div>
     <ul class="list">
-      <% @agenda.children.by_index.each do |agenda| %>
-        <li><%= link_to(agenda, agenda_path(agenda)) %></li>
+      <% @agenda.items.each do |item| %>
+        <li><%= link_to(item, agenda_path(@agenda, agenda_item: item)) %></li>
       <% end %>
     </ul>
   <% end %>
@@ -49,7 +39,7 @@
     <h1>
       <%= @agenda.to_s %>
       <small>
-        <%= agenda_status_str(@agenda.status) %>
+        <%= agenda_status(@agenda) %>
       </small>
     </h1>
   </div>

@@ -11,13 +11,13 @@ RSpec.describe Admin::AdjustmentsController, type: :controller do
   end
 
   describe 'GET #index' do
-    it 'assigns an agenda' do
-      agenda = create(:agenda, status: :current)
-      vote = create(:vote, status: :open, agenda: agenda)
+    it 'assigns an agenda_item' do
+      agenda_item = create(:agenda_item, status: :current)
+      vote = create(:vote, status: :open, agenda_item: agenda_item)
 
       get(:index)
       response.status.should eq(200)
-      assigns(:vote_status_view).agenda.should eq(agenda)
+      assigns(:vote_status_view).agenda_item.should eq(agenda_item)
       assigns(:vote_status_view).vote.should eq(vote)
     end
   end
@@ -44,9 +44,9 @@ RSpec.describe Admin::AdjustmentsController, type: :controller do
 
   describe 'POST #create' do
     it 'valid parameters' do
-      agenda = create(:agenda, status: :current)
+      agenda_item = create(:agenda_item, status: :current)
       user = create(:user)
-      attributes = { agenda_id: agenda.to_param,
+      attributes = { agenda_item_id: agenda_item.to_param,
                      user_id: user.to_param,
                      presence: true }
 

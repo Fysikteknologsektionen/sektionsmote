@@ -52,8 +52,8 @@ RSpec.describe Admin::VotesController, type: :controller do
     end
 
     it 'fails if the vote is open' do
-      agenda = create(:agenda, status: :current)
-      vote = create(:vote, status: :open, agenda: agenda)
+      agenda = create(:agenda_item, status: :current)
+      vote = create(:vote, status: :open, agenda_item: agenda)
 
       get(:edit, params: { id: vote.to_param })
 
@@ -117,8 +117,9 @@ RSpec.describe Admin::VotesController, type: :controller do
     end
 
     it 'fails if the vote is open' do
-      agenda = create(:agenda, status: :current)
-      vote = create(:vote, title: 'A Bad Title', status: :open, agenda: agenda)
+      agenda = create(:agenda_item, status: :current)
+      vote = create(:vote, title: 'A Bad Title', status: :open,
+                           agenda_item: agenda)
 
       patch(:update, params: { id: vote.to_param,
                                vote: { title: 'A Good Title' } })

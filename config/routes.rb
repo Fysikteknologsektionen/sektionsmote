@@ -38,7 +38,9 @@ Rails.application.routes.draw do
         post :update_row_order, on: :collection
       end
 
-      resources :agendas, path: :dagordning, except: [:show]
+      resources :agendas, path: :dagordning, except: [:show] do
+        resources :bullets, path: :punkt, only: %i[create update destroy]
+      end
       resources :current_agendas, path: 'aktuell-dagordning',
                                   only: %i[update destroy]
 

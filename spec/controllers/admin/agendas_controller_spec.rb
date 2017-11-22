@@ -155,9 +155,8 @@ RSpec.describe Admin::AgendasController, type: :controller do
 
     it 'works if the agenda has non-current children' do
       agenda = create(:agenda)
-      child1 = create(:agenda, parent: agenda)
-      child2 = create(:agenda, status: :closed, parent: agenda)
-      grandchild = create(:agenda, parent: child2)
+      child1 = create(:agenda_item, agenda: agenda)
+      child2 = create(:agenda_item, status: :closed, agenda: agenda)
 
       lambda do
         delete(:destroy, params: { id: agenda.to_param })
@@ -166,16 +165,13 @@ RSpec.describe Admin::AgendasController, type: :controller do
       agenda.reload
       child1.reload
       child2.reload
-      grandchild.reload
 
       agenda.deleted?.should be_truthy
       child1.deleted?.should be_truthy
       child2.deleted?.should be_truthy
-      grandchild.deleted?.should be_truthy
 
       response.should redirect_to(admin_agendas_path)
       flash[:notice].should eq(I18n.t('agenda.deleted_ok'))
     end
   end
-
 end

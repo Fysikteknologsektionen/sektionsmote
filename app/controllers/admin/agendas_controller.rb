@@ -6,7 +6,7 @@ module Admin
     authorize_resource
 
     def index
-      @agendas = Agenda.order(:sort_index).includes(:parent).page(params[:page])
+      @agendas = Agenda.order(:position).page(params[:page])
     end
 
     def new
@@ -26,6 +26,7 @@ module Admin
 
     def edit
       @agenda = Agenda.find(params[:id])
+      @agenda.items.build
     end
 
     def update
@@ -56,8 +57,7 @@ module Admin
     private
 
     def agenda_params
-      params.require(:agenda).permit(:title, :index, :parent_id,
-                                     :status, :short, :description)
+      params.require(:agenda).permit(:title, :position, :description)
     end
   end
 end

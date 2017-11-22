@@ -1,0 +1,16 @@
+<table class="table table-striped table-bordered agenda">
+  <thead>
+    <tr>
+      <th><%= AgendaItem.human_attribute_name(:type) %></th>
+      <th><%= AgendaItem.human_attribute_name(:position) %></th>
+      <th><%= AgendaItem.human_attribute_name(:title) %></th>
+      <th><%= AgendaItem.human_attribute_name(:status) %></th>
+      <th><%= t(:edit) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% items.each do |item| %>
+      <%= render(item.table_form_partial, agenda: agenda, item: item) %>
+    <% end %>
+  </tbody>
+</table>

@@ -2,8 +2,7 @@
 
 # Allows uploading a document for viewing
 class Document < ApplicationRecord
-  belongs_to :user, optional: true
-  belongs_to :agenda, optional: true
+  belongs_to :bullet
 
   validates :title, :category, presence: true
 

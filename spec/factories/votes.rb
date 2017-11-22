@@ -3,6 +3,7 @@ FactoryBot.define do
     title
     status :future
     choices 1
+    agenda_item
 
     trait :with_options do
       vote_options do |o|

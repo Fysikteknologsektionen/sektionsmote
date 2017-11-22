@@ -12,26 +12,24 @@
       </h5>
     </li>
     <% agendas.each do |agenda| %>
-      <% if agenda.start_page? %>
-        <li class="<%= "list-group-item #{agenda.current_status}" %>">
-          <h4 class="list-group-item-heading">
-            <%= agenda_link(agenda) %>
-          </h4>
-          <span class="badge">
-            <%= agenda_status_str(agenda.current_status) %>
-          </span>
-          <p class="list-group-item-text">
-            <% if agenda.children.present? %>
-              <% agenda.children.by_index.each do |a| %>
-                <%= agenda_link(a) %>
+      <li class="<%= "list-group-item #{agenda}" %>">
+        <h4 class="list-group-item-heading">
+          <%= agenda_link(agenda) %>
+        </h4>
+        <span class="badge">
+          <%= agenda_status(agenda) %>
+        </span>
+        <p class="list-group-item-text">
+          <% if agenda.items.any? %>
+              <% agenda.items.each do |item| %>
+                <%= link_to(item, agenda_path(agenda, agenda_item: item)) %>
                 <br>
               <% end %>
             <% else %>
               <br>
             <% end %>
-          </p>
-        </li>
-      <% end %>
+        </p>
+      </li>
     <% end %>
   </ul>
 <% end %>

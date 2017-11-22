@@ -6,7 +6,7 @@ class Vote < ApplicationRecord
 
   has_many :audits, as: :auditable
 
-  belongs_to :agenda, optional: true
+  belongs_to :agenda_item
   has_many :vote_options, dependent: :destroy
   has_many :vote_posts, dependent: :destroy
 
@@ -78,7 +78,7 @@ class Vote < ApplicationRecord
 
   def open_on_agenda
     return unless open?
-    return if agenda.present? && agenda.current?
+    return if agenda_item.present? && agenda_item.current?
     errors.add(:status, I18n.t('vote.wrong_agenda'))
   end
 end

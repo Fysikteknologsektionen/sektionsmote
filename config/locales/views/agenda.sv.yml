@@ -9,6 +9,15 @@ sv:
         new_agenda: Ny dagordningspunkt
         title: Administrera dagordning
 
+      edit:
+        all: Hela dagordningen
+        items: Underpunkter
+        title: Redigera punkt
+
+      new:
+        all_agendas: Alla punkter
+        title: Ny dagordningspunkt
+
   agenda:
     admin: Administrera dagordning
     all: Visa hela dagordningen

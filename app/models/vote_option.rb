@@ -6,7 +6,7 @@ class VoteOption < ApplicationRecord
 
   has_many :audits, as: :auditable
 
-  belongs_to :vote, optional: true
+  belongs_to :vote
   validates :title, presence: true
 
   after_create :log_create
@@ -14,20 +14,25 @@ class VoteOption < ApplicationRecord
   after_destroy :log_destroy
 
   scope :order_all, -> { with_deleted.order(count: :desc) }
+  def to_s
+    title || id
+  end
+
+  private
 
   def log_create
     log('create')
   end
 
   def log_update
-    if log_changes.present?
-      log('update')
-    end
+    log('update') if log_changes.present?
   end
 
   def log_destroy
-    Audit.create!(auditable: self, vote_id: vote_id, audited_changes: destroy_changes,
-                  action: 'destroy', updater_id: updater, skip_presence_validation: true)
+    Audit.create!(auditable: self, vote_id: vote_id,
+                  audited_changes: destroy_changes,
+                  action: 'destroy', updater_id: updater,
+                  skip_presence_validation: true)
   end
 
   def log(action)
@@ -51,7 +56,4 @@ class VoteOption < ApplicationRecord
     User.current.id if User.current && !destroyed?
   end
 
-  def to_s
-    title || id
-  end
 end

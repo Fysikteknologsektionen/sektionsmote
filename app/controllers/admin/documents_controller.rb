@@ -2,7 +2,7 @@ class Admin::DocumentsController < Admin::BaseController
   load_and_authorize_resource
 
   def index
-    @documents = Document.order(:title).includes(:user, :agenda)
+    @documents = Document.order(:title).includes(:agenda)
     @documents = @documents.page(params[:page])
   end
 
@@ -18,7 +18,6 @@ class Admin::DocumentsController < Admin::BaseController
 
   def create
     @document = Document.new(document_params)
-    @document.user = current_user
     @categories = Document.categories
 
     if @document.save
@@ -31,7 +30,6 @@ class Admin::DocumentsController < Admin::BaseController
 
   def update
     @document = Document.find(params[:id])
-    @document.user = current_user
     @categories = Document.categories
 
     if @document.update(document_params)

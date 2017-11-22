@@ -6,7 +6,7 @@ class Adjustment < ApplicationRecord
   include RankedModel
   paginates_per(100)
 
-  belongs_to :agenda, -> { with_deleted }
+  belongs_to :bullet, -> { with_deleted }
   belongs_to :user, optional: false
 
   after_update :log_update
@@ -30,12 +30,14 @@ class Adjustment < ApplicationRecord
   end
 
   def update_changes
-    saved_changes.extract!(:agenda_id, :presence)
+    saved_changes.extract!(:bullet_id, :presence)
   end
 
   def destroy_changes
-    diff = saved_changes.extract!(:agenda_id, :presence)
-    diff[:name] = agenda.to_s if agenda.present? && !diff.key?('agenda_id')
+    diff = saved_changes.extract!(:bullet_id, :presence)
+    if bullet.present? && diff.key?(:bullet_key)
+      diff[:name] = bullet.to_s
+    end
     diff
   end
 

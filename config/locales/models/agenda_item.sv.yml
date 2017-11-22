@@ -1,0 +1,18 @@
+sv:
+  model:
+    agenda_item:
+      types:
+        announcement: Information
+        decision: Beslut
+        election: Val
+
+      statuses:
+        closed: Stängd
+        current: Aktuell
+        future: Framtida
+
+  activerecord:
+    models:
+      agenda_item:
+        one: Underpunkt
+        other: Underpunkter

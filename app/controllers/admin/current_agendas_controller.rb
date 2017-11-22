@@ -6,13 +6,13 @@ module Admin
     authorize_resource(class: Agenda)
 
     def update
-      @agenda = Agenda.find(params[:id])
+      @agenda = AgendaItem.find(params[:id])
       expire_fragment('agenda_startpage')
       @success = @agenda.update(status: :current)
     end
 
     def destroy
-      @agenda = Agenda.find(params[:id])
+      @agenda = AgendaItem.find(params[:id])
       expire_fragment('agenda_startpage')
       @success = @agenda.update(status: :closed)
     end

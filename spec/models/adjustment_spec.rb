@@ -5,13 +5,13 @@ RSpec.describe Adjustment, type: :model do
     it 'adds new adjustments to the bottom' do
       user = create(:user)
 
-      agenda1 = create(:agenda, status: :current)
-      agenda2 = create(:agenda)
-      agenda3 = create(:agenda)
+      agenda_item1 = create(:agenda_item, status: :current)
+      agenda_item2 = create(:agenda_item)
+      agenda_item3 = create(:agenda_item)
 
-      adjustment1 = create(:adjustment, user: user, agenda: agenda1)
-      adjustment2 = create(:adjustment, user: user, agenda: agenda2)
-      adjustment3 = create(:adjustment, user: user, agenda: agenda3)
+      adjustment1 = create(:adjustment, user: user, agenda_item: agenda_item1)
+      adjustment2 = create(:adjustment, user: user, agenda_item: agenda_item2)
+      adjustment3 = create(:adjustment, user: user, agenda_item: agenda_item3)
 
       user.adjustments.rank(:row_order).should eq [adjustment1, adjustment2, adjustment3]
     end
@@ -19,13 +19,13 @@ RSpec.describe Adjustment, type: :model do
     it 'moves the last adjustment to the top' do
       user = create(:user)
 
-      agenda1 = create(:agenda, status: :current)
-      agenda2 = create(:agenda)
-      agenda3 = create(:agenda)
+      agenda_item1 = create(:agenda_item, status: :current)
+      agenda_item2 = create(:agenda_item)
+      agenda_item3 = create(:agenda_item)
 
-      adjustment1 = create(:adjustment, user: user, agenda: agenda1)
-      adjustment2 = create(:adjustment, user: user, agenda: agenda2)
-      adjustment3 = create(:adjustment, user: user, agenda: agenda3)
+      adjustment1 = create(:adjustment, user: user, agenda_item: agenda_item1)
+      adjustment2 = create(:adjustment, user: user, agenda_item: agenda_item2)
+      adjustment3 = create(:adjustment, user: user, agenda_item: agenda_item3)
 
       adjustment3.update(row_order_position: 0)
 
@@ -35,13 +35,13 @@ RSpec.describe Adjustment, type: :model do
     it 'deltes an adjustment' do
       user = create(:user)
 
-      agenda1 = create(:agenda, status: :current)
-      agenda2 = create(:agenda)
-      agenda3 = create(:agenda)
+      agenda_item1 = create(:agenda_item, status: :current)
+      agenda_item2 = create(:agenda_item)
+      agenda_item3 = create(:agenda_item)
 
-      adjustment1 = create(:adjustment, user: user, agenda: agenda1)
-      adjustment2 = create(:adjustment, user: user, agenda: agenda2)
-      adjustment3 = create(:adjustment, user: user, agenda: agenda3)
+      adjustment1 = create(:adjustment, user: user, agenda_item: agenda_item1)
+      adjustment2 = create(:adjustment, user: user, agenda_item: agenda_item2)
+      adjustment3 = create(:adjustment, user: user, agenda_item: agenda_item3)
 
       adjustment2.destroy
 
@@ -51,13 +51,13 @@ RSpec.describe Adjustment, type: :model do
     it 'moves up an adjustment' do
       user = create(:user)
 
-      agenda = create(:agenda, status: :current)
+      agenda_item = create(:agenda_item, status: :current)
 
-      a1 = create(:adjustment, user: user, agenda: agenda)
-      a2 = create(:adjustment, user: user, agenda: agenda)
-      a3 = create(:adjustment, user: user, agenda: agenda)
-      a4 = create(:adjustment, user: user, agenda: agenda)
-      a5 = create(:adjustment, user: user, agenda: agenda)
+      a1 = create(:adjustment, user: user, agenda_item: agenda_item)
+      a2 = create(:adjustment, user: user, agenda_item: agenda_item)
+      a3 = create(:adjustment, user: user, agenda_item: agenda_item)
+      a4 = create(:adjustment, user: user, agenda_item: agenda_item)
+      a5 = create(:adjustment, user: user, agenda_item: agenda_item)
 
       a4.update(row_order_position: 1)
 

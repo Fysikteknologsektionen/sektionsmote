@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe Vote, type: :model do
   describe 'validations' do
     it 'can only have one open vote' do
-      agenda = create(:agenda, status: :current)
-      create(:vote, status: :open, agenda: agenda)
+      agenda_item = create(:agenda_item, status: :current)
+      create(:vote, status: :open, agenda_item: agenda_item)
       vote = build(:vote, status: :open)
       vote.valid?
 
@@ -14,8 +14,8 @@ RSpec.describe Vote, type: :model do
     it 'updates present count on closing vote' do
       create(:user, presence: true)
       create(:user, presence: true)
-      agenda = create(:agenda, status: :current)
-      vote = create(:vote, status: :open, agenda: agenda)
+      agenda_item = create(:agenda_item, status: :current)
+      vote = create(:vote, status: :open, agenda_item: agenda_item)
       vote.present_users.should equal 0
 
       vote.update(status: :closed)
@@ -25,8 +25,8 @@ RSpec.describe Vote, type: :model do
     it 'does not update present count on opening vote' do
       create(:user, presence: true)
       create(:user, presence: true)
-      agenda = create(:agenda, status: :current)
-      vote = create(:vote, status: :future, agenda: agenda)
+      agenda_item = create(:agenda_item, status: :current)
+      vote = create(:vote, status: :future, agenda_item: agenda_item)
       vote.present_users.should equal 0
 
       vote.update(status: :open)
